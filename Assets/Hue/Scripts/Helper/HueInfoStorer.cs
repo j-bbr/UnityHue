@@ -4,7 +4,7 @@ using System.Collections;
 namespace UnityHue {
 	public class HueInfoStorer : MonoBehaviour {
 		public string prefKey = "StoredHueInformation";
-		
+
 		public void Save()
 		{
 			PlayerPrefs.SetString(prefKey, HueBridge.instance.GetHueStateString());

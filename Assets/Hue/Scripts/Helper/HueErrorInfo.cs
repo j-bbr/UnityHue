@@ -7,7 +7,7 @@ using MiniJSON;
 namespace UnityHue{
 	/// <summary>
 	/// Stores information about the error that occured when performing an operation
-	/// with the hue. Can either be an error with the webrequest (webrequest error field)
+	/// with Unity Hue. Can either be an error with the webrequest (webrequest error field)
 	/// with the hue api (errorcode, address, description) or with unexpected json (failingJson)
 	/// </summary>
 	[System.Serializable]

@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using MiniJSON;
 
 namespace UnityHue{
+	/// <summary>
+	/// Singleton that interfaces with the Hue API. Generally the HueBridge Component
+	/// doesn't have to be present in a scene but can bootstrap itself
+	/// </summary>
+	[AddComponentMenu("Unity Hue/Hue Bridge")]
 	public class HueBridge : UnitySingleton<HueBridge> {
 		[Tooltip("Used for discovery of all the bridges in your network" +
 			" (that have contacted a philipps server in the past.)")]
@@ -20,10 +25,26 @@ namespace UnityHue{
 		protected List<HueGroup> groups = new List<HueGroup>();
 		public List<HueBridgeInfo> Bridges { get; private set;}
 
-
+		void Awake ()
+		{
+			DontDestroyOnLoad(this);
+		}
 		#region Public Functions
 
+		/// <summary>
+		/// Start discovery of bridges in the current network
+		/// OnFinished will be called after a sucessful response 
+		/// (even if the response is that zero bridges are in the network).
+		/// If there are more than zero bridges in the Network the first one
+		/// will be assigned to currentBridge, the full list is accesible under
+		/// the Bridges property.
+		/// </summary>
+		/// <param name="onFinished">On finished.</param>
 		public void DiscoverBridges(Action onFinished = null)
+		{
+			DiscoverBridges(onFinished, HueErrorInfo.LogError);
+		}
+		public void DiscoverBridges(Action onFinished, Action<HueErrorInfo> errorCallback)
 		{
 			StartCoroutine(GetBridgesEnumerator(
 				x => {
@@ -33,7 +54,7 @@ namespace UnityHue{
 					if(onFinished != null)
 						onFinished();
 				},
-				HueErrorInfo.LogError));
+				errorCallback));
 		}
 			
 		public void UpdateLights(Action onFinished = null)
