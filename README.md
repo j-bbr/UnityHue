@@ -10,3 +10,6 @@ the hue bridge so it should be pretty crossplatform but will only work in Unity 
 - Rename light, change light state (on/off, color, transition time, alert, effect etc. (pretty much all the api allows)), 
 get light state and delete light 
 - Create groups, rename groups and change associated lights, delete groups and change group state (like with lamps but affecting all the lamps in the group)
+
+##License:
+MIT
