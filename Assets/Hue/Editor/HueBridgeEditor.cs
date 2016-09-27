@@ -13,7 +13,11 @@ namespace UnityHue{
 
 			if(GUILayout.Button("Discover Bridge", GUILayout.Height(30)))
 			{
-				script.DiscoverBridges();
+				script.DiscoverBridges(()=> 
+					{
+						if(script.Bridges.Count < 1)
+							Debug.LogWarning("No bridges found in Network");
+					});
 			}
 
 			GUILayout.Space(7f);
