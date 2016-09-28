@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using MiniJSON;
 
 namespace UnityHue{
+	/// <summary>
+	/// Class for accessing and modifying a single Hue lamp
+	/// </summary>
 	[System.Serializable]
 	public class HueLamp {
 		public string name;
@@ -69,7 +72,15 @@ namespace UnityHue{
 		{
 			SetState(successCallback, errorCallback, StateToParameters(state));
 		}
-
+		/// <summary>
+		/// Sets the state of the lamp according to the supplied JsonParameters
+		/// A JsonParameter consists of a key (the name of the parameter as specified
+		/// by the hue api i.e "bri" for brightness) and a value to which that parameter
+		/// should be set. 
+		/// </summary>
+		/// <param name="successCallback">Success callback.</param>
+		/// <param name="errorCallback">Error callback.</param>
+		/// <param name="parameters">Parameters.</param>
 		public void SetState (Action<string> successCallback, 
 			Action<HueErrorInfo> errorCallback, params JsonParameter[] parameters)
 		{
@@ -79,7 +90,7 @@ namespace UnityHue{
 		}
 		public void SetName (string lampName, Action<string> successCallback = null, Action<HueErrorInfo> errorCallback = null)
 		{
-			string url = HueBridge.instance.BaseURLWithUserName + "/lights/" + id + "/state";
+			string url = HueBridge.instance.BaseURLWithUserName + "/lights/" + id;
 			UnityWebRequest renameRequest = UnityWebRequest.Put(url, 
 				JsonHelper.CreateJsonParameterString(new JsonParameter(HueKeys.NAME, lampName)));
 			HueBridge.instance.SendRequest(renameRequest, successCallback, errorCallback);
@@ -104,39 +115,6 @@ namespace UnityHue{
 		{
 			HueBridge.instance.DeleteLamp(id, HueErrorInfo.LogError);
 		}
-
-//		void Update () {
-//			if (oldOn != on || oldColor != color) {
-//				HueBridge bridge = HueBridge.instance;
-//
-//	            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://"+ bridge.hostName+  "/api/" + bridge.username + "/lights/" + devicePath + "/state");
-//	            Debug.Log("http" + bridge.hostName + bridge.portNumber + "/api/" + bridge.username + "/lights/" + devicePath + "/state");
-//				request.Method = "PUT";
-//
-//				Vector3 hsv = HSVFromRGB (color);
-//
-//				var state = new Dictionary<string, object> ();
-//				state ["on"] = on;
-//				state ["hue"] = (int)(hsv.x / 360.0f * 65535.0f);
-//				state ["sat"] = (int)(hsv.y * 255.0f);
-//				state ["bri"] = (int)(hsv.z * 255.0f);
-//	            if ((int)(hsv.z * 255.0f) == 0) state["on"] = false;
-//
-//				byte[] bytes = System.Text.Encoding.ASCII.GetBytes (Json.Serialize (state));
-//				request.ContentLength = bytes.Length;
-//				
-//				System.IO.Stream s = request.GetRequestStream ();
-//				s.Write (bytes, 0, bytes.Length);
-//				s.Close ();
-//
-//				HttpWebResponse response = (HttpWebResponse)request.GetResponse ();
-//
-//				response.Close ();
-//			}
-//
-//			oldOn = on;
-//			oldColor = color;
-//		}
 
 		public static Vector3 HSVFromRGB(Color rgb) {
 			float max = Mathf.Max(rgb.r, Mathf.Max(rgb.g, rgb.b));
@@ -169,7 +147,14 @@ namespace UnityHue{
 			return new Vector3(hue, saturation, brightness);
 		}
 		#region Parameters
-
+		/// <summary>
+		/// Transforms a RGB into color into the corresponding hue, brightness and saturation
+		/// parameters for the Hue lamp
+		/// </summary>
+		/// <param name="color">Color.</param>
+		/// <param name="hue">Hue.</param>
+		/// <param name="saturation">Saturation.</param>
+		/// <param name="brightness">Brightness.</param>
 		public static void ColorParameter(Color color, out JsonParameter hue, out JsonParameter saturation, out JsonParameter brightness)
 		{
 			Vector3 hsv = HSVFromRGB(color);

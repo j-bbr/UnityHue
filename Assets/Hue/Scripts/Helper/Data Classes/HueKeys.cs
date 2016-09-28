@@ -1,5 +1,8 @@
 ﻿
 namespace UnityHue{
+	/// <summary>
+	/// Class with string keys for the api parameters
+	/// </summary>
 	public class HueKeys {
 		public const string ON = "on";
 		public const string BRIGHTNESS = "bri";
