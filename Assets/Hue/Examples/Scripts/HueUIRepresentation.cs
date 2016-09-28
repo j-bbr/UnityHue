@@ -27,7 +27,7 @@ namespace UnityHue.Examples{
 				HueParameters.LightOnParameter(onToggle.isOn),
 				HueParameters.BrightnessParameter((int) brightnessSlider.value),
 				HueParameters.HueParameter((int) hueSlider.value),
-				HueParameters.SatParameter((int) saturationSlider.value),
+				HueParameters.SaturationParameter((int) saturationSlider.value),
 				HueParameters.TransitionParameter((int) transitionTime.value)
 			);
 		}
@@ -60,7 +60,7 @@ namespace UnityHue.Examples{
 			yield return new WaitForSeconds(timeOut);
 			lamp.SetColor(Color.yellow, HueParameters.TransitionParameter(0));
 			yield return new WaitForSeconds(timeOut);
-			lamp.SetColor(Color.green, HueParameters.TransitionParameter(0));
+			lamp.SetColor(Color.green,HueParameters.TransitionParameter(0));
 		}
 	}
 }

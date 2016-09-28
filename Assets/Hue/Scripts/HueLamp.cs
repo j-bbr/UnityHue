@@ -116,35 +116,22 @@ namespace UnityHue{
 			HueBridge.instance.DeleteLamp(id, HueErrorInfo.LogError);
 		}
 
-		public static Vector3 HSVFromRGB(Color rgb) {
-			float max = Mathf.Max(rgb.r, Mathf.Max(rgb.g, rgb.b));
-			float min = Mathf.Min(rgb.r, Mathf.Min(rgb.g, rgb.b));
-			
-			float brightness = rgb.a;
-			
-			float hue, saturation;
-			if (max == min) {
-				hue = 0f;
-				saturation = 0f;
-			} else {
-				float c = max - min;
-				if (max == rgb.r) {
-					hue = (rgb.g - rgb.b) / c;
-				} else if (max == rgb.g) {
-					hue = (rgb.b - rgb.r) / c + 2f;
-				} else {
-					hue = (rgb.r - rgb.g) / c + 4f;
-				}
-
-				hue *= 60f;
-				if (hue < 0f) {
-					hue += 360f;
-				}
-				
-				saturation = c / max;
-			}
-
-			return new Vector3(hue, saturation, brightness);
+		/// <summary>
+		/// Maps an RGB color with (1, 1, 1) being complete white
+		/// into hue HSV color space with hue going from 0 to 65535,
+		/// saturation from 0 to 254 and brightness from 1 to 254.
+		/// Keep in mind that the Hue API only accepts ints for those
+		/// values.
+		/// </summary>
+		/// <returns>The HS vfrom RG.</returns>
+		/// <param name="rgb">Rgb.</param>
+		public static Vector3 HueHSVfromRGB(Color rgb) {
+			float brightness, hue, saturation;
+			Color.RGBToHSV(rgb, out hue, out saturation, out brightness);
+			hue *= 65535f;
+			saturation *= 254f;
+			brightness *= 254f;
+			return new Vector3(hue, saturation, Mathf.Max(brightness, 1f));
 		}
 	}
 }

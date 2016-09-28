@@ -9,7 +9,7 @@ namespace UnityHue{
 
 		/// <summary>
 		/// Transforms a RGB into color into the corresponding hue, brightness and saturation
-		/// parameters for the Hue lamp
+		/// parameters for the Hue lamp.
 		/// </summary>
 		/// <param name="color">Color.</param>
 		/// <param name="hue">Hue.</param>
@@ -17,16 +17,17 @@ namespace UnityHue{
 		/// <param name="brightness">Brightness.</param>
 		public static void ColorParameter(Color color, out JsonParameter hue, out JsonParameter saturation, out JsonParameter brightness)
 		{
-			Vector3 hsv = HueLamp.HSVFromRGB(color);
-			hue = new JsonParameter(HueKeys.HUE, hsv.x);
-			saturation = new JsonParameter(HueKeys.SATURATION, hsv.y);
-			brightness = new JsonParameter(HueKeys.BRIGHTNESS, hsv.z);
+			Vector3 hsv = HueLamp.HueHSVfromRGB(color);
+			hue = HueParameter(Mathf.RoundToInt(hsv.x));
+			saturation = SaturationParameter(Mathf.RoundToInt(hsv.y));
+			brightness = BrightnessParameter(Mathf.RoundToInt(hsv.z));
 		}
 
 		public static JsonParameter LightOnParameter(bool on)
 		{
 			return new JsonParameter(HueKeys.ON, on);
-		}	public static JsonParameter BrightnessParameter(int brightness)
+		}	
+		public static JsonParameter BrightnessParameter(int brightness)
 		{
 			return new JsonParameter(HueKeys.BRIGHTNESS, brightness);
 		}
@@ -34,7 +35,7 @@ namespace UnityHue{
 		{
 			return new JsonParameter(HueKeys.HUE, hue);
 		}
-		public static JsonParameter SatParameter(int sat)
+		public static JsonParameter SaturationParameter(int sat)
 		{
 			return new JsonParameter(HueKeys.SATURATION, sat);
 		}
