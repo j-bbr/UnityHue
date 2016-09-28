@@ -24,11 +24,11 @@ namespace UnityHue.Examples{
 			if(lamp == null)
 				return;
 			lamp.SetState(
-				HueLamp.LightOnParameter(onToggle.isOn),
-				HueLamp.BrightnessParameter((int) brightnessSlider.value),
-				HueLamp.HueParameter((int) hueSlider.value),
-				HueLamp.SatParameter((int) saturationSlider.value),
-				HueLamp.TransitionParameter((int) transitionTime.value)
+				HueParameters.LightOnParameter(onToggle.isOn),
+				HueParameters.BrightnessParameter((int) brightnessSlider.value),
+				HueParameters.HueParameter((int) hueSlider.value),
+				HueParameters.SatParameter((int) saturationSlider.value),
+				HueParameters.TransitionParameter((int) transitionTime.value)
 			);
 		}
 		public void SetColorLoop()
@@ -36,7 +36,7 @@ namespace UnityHue.Examples{
 			if(lamp == null)
 				return;
 			lamp.SetState(
-				HueLamp.EffectParameter()
+				HueParameters.EffectParameter()
 			);
 		}
 		public void SetBlink()
@@ -44,8 +44,23 @@ namespace UnityHue.Examples{
 			if(lamp == null)
 				return;
 			lamp.SetState(
-				HueLamp.AlertParameter()
+				HueParameters.AlertParameter()
 			);
+		}
+		public void SetRacingColors(float timeOut = 1f)
+		{
+			if(lamp == null)
+				return;
+			StartCoroutine(RacingCountdown(timeOut));
+		}
+		IEnumerator RacingCountdown(float timeOut = 1f)
+		{
+			//Change the color instantly (no transition time)
+			lamp.SetColor(Color.red, HueParameters.TransitionParameter(0));
+			yield return new WaitForSeconds(timeOut);
+			lamp.SetColor(Color.yellow, HueParameters.TransitionParameter(0));
+			yield return new WaitForSeconds(timeOut);
+			lamp.SetColor(Color.green, HueParameters.TransitionParameter(0));
 		}
 	}
 }
