@@ -12,6 +12,7 @@ namespace UnityHue.Examples{
 		public Slider brightnessSlider;
 		public Slider saturationSlider;
 		public Slider transitionTime;
+		private bool effectActive;
 
 		public void Initialize(HueLamp lamp)
 		{
@@ -35,8 +36,9 @@ namespace UnityHue.Examples{
 		{
 			if(lamp == null)
 				return;
+			effectActive = !effectActive;
 			lamp.SetState(
-				HueParameters.EffectParameter()
+				HueParameters.EffectParameter(effectActive ? "colorloop" : "none")
 			);
 		}
 		public void SetBlink()
